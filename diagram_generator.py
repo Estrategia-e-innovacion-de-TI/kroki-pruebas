@@ -5,12 +5,12 @@ This script takes a text file containing diagram source code and generates
 an SVG image using the Kroki library.
 
 Usage:
-    python kroki_generator.py <input_file.txt> <diagram_type> [output_file.svg]
+    python diagram_generator.py <input_file.txt> <diagram_type> [output_file.svg]
 
 Example:
-    python kroki_generator.py graph.txt graphviz diagram.svg
-    python kroki_generator.py uml.txt plantuml
-    python kroki_generator.py flow.txt mermaid flowchart.svg
+    python diagram_generator.py graph.txt graphviz diagram.svg
+    python diagram_generator.py uml.txt plantuml
+    python diagram_generator.py flow.txt mermaid flowchart.svg
 """
 
 import argparse
