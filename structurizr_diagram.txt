@@ -1,0 +1,161 @@
+workspace {
+    model {
+        customer = person "Customer" "User of the e-commerce platform"
+        businessAnalyst = person "Business Analyst" "Analyzes business data and trends"
+
+        ecommerceSystem = softwareSystem "E-Commerce System" "Online shopping platform" {
+            webApp = container "Web Application" "Front-end interface for customers" "React/Angular" {
+                productCatalog = component "Product Catalog" "Displays products and categories"
+                shoppingCart = component "Shopping Cart" "Manages user selections and checkout"
+                userAccount = component "User Account" "Handles user registration and profiles"
+                checkout = component "Checkout" "Processes payments and orders"
+            }
+
+            apiGateway = container "API Gateway" "Routes requests to appropriate services" "AWS API Gateway"
+
+            services = container "Microservices" "Backend business logic" "Node.js/Python" {
+                productService = component "Product Service" "Manages product information"
+                orderService = component "Order Service" "Processes and tracks orders"
+                userService = component "User Service" "Manages user data and authentication"
+                inventoryService = component "Inventory Service" "Tracks product availability"
+            }
+
+            database = container "Transactional Database" "Stores operational data" "Amazon RDS"
+        }
+
+        analyticsSystem = softwareSystem "Analytics System" "Processes and analyzes e-commerce data" {
+            dataIngestion = container "Data Ingestion Layer" "Collects and streams data" {
+                kinesis = component "Amazon Kinesis" "Real-time data streaming"
+                msk = component "Amazon MSK" "Kafka streaming backup"
+            }
+
+            dataProcessing = container "Data Processing Layer" "Transforms raw data" {
+                kinesisAnalytics = component "Kinesis Analytics" "Real-time processing"
+                glue = component "AWS Glue" "ETL jobs"
+                emr = component "Amazon EMR" "Big data processing"
+            }
+
+            dataStorage = container "Data Storage Layer" "Stores raw and processed data" {
+                s3 = component "Amazon S3" "Data lake storage"
+                redshift = component "Amazon Redshift" "Data warehouse"
+            }
+
+            analyticsServices = container "Analytics Services" "Provides insights and visualization" {
+                athena = component "Amazon Athena" "SQL queries on S3 data"
+                quicksight = component "Amazon QuickSight" "Business intelligence dashboards"
+                opensearch = component "Amazon OpenSearch" "Search and analytics"
+            }
+        }
+
+        # Relationships - Users to Systems
+        customer -> ecommerceSystem "Uses to shop online"
+        businessAnalyst -> analyticsSystem "Uses for business insights"
+
+        # Web App to Backend
+        webApp -> apiGateway "Makes API calls to"
+        apiGateway -> services "Routes requests to"
+        services -> database "Reads from and writes to"
+
+        # Analytics Data Flow
+        webApp -> kinesis "Streams clickstream data to"
+        services -> kinesis "Streams transaction data to"
+
+        kinesis -> kinesisAnalytics "Feeds data to"
+        msk -> glue "Provides backup data to"
+
+        kinesisAnalytics -> s3 "Stores processed data in"
+        glue -> s3 "Stores transformed data in"
+        glue -> redshift "Loads transformed data into"
+        emr -> s3 "Stores analysis results in"
+
+        s3 -> athena "Provides data for queries to"
+        redshift -> quicksight "Provides data for dashboards to"
+
+        opensearch -> productCatalog "Enhances search functionality for"
+        quicksight -> businessAnalyst "Presents dashboards to"
+
+        # Component level relationships within web app
+        customer -> productCatalog "Browses products using"
+        customer -> shoppingCart "Manages items using"
+        customer -> userAccount "Manages profile using"
+        customer -> checkout "Places orders using"
+
+        # Component relationships within services
+        productCatalog -> productService "Gets product data from"
+        shoppingCart -> inventoryService "Checks availability via"
+        checkout -> orderService "Creates orders via"
+        userAccount -> userService "Manages user data via"
+    }
+
+    views {
+        systemContext ecommerceSystem "SystemContext" {
+            include *
+            autoLayout
+        }
+
+        container ecommerceSystem "EcommerceContainers" {
+            include *
+            autoLayout
+        }
+
+        component webApp "WebAppComponents" {
+            include *
+            autoLayout
+        }
+
+        component services "MicroserviceComponents" {
+            include *
+            autoLayout
+        }
+
+        systemLandscape "EntireEcosystem" {
+            include *
+            autoLayout
+        }
+
+        container analyticsSystem "AnalyticsContainers" {
+            include *
+            autoLayout
+        }
+
+        component dataIngestion "DataIngestionComponents" {
+            include *
+            autoLayout
+        }
+
+        component dataProcessing "DataProcessingComponents" {
+            include *
+            autoLayout
+        }
+
+        component dataStorage "DataStorageComponents" {
+            include *
+            autoLayout
+        }
+
+        component analyticsServices "AnalyticsServicesComponents" {
+            include *
+            autoLayout
+        }
+
+        styles {
+            element "Person" {
+                shape Person
+                background #08427B
+                color #ffffff
+            }
+            element "Software System" {
+                background #1168BD
+                color #ffffff
+            }
+            element "Container" {
+                background #438DD5
+                color #ffffff
+            }
+            element "Component" {
+                background #85BBF0
+                color #000000
+            }
+        }
+    }
+}
