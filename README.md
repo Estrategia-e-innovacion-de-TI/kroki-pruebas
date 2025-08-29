@@ -2,13 +2,6 @@
 
 This test suite verifies the functionality of the [Kroki.io](https://kroki.io) diagram rendering API using `pytest` and the Python `kroki` client.
 
-## 🔧 Installation
-
-```bash
-uv init
-uv add pytest requests kroki
-```
-
 ## 🚀 Running Tests
 
 From the project root, execute:
@@ -22,6 +15,12 @@ uv run pytest tests/
 - `test_diagram_creation.py`: Generates diagrams in all formats
 - `test_error_handling.py`: Checks for invalid inputs
 - `test_full_coverage.py`: Ensures all supported diagram types/formats are working
+
+## ✨ Diagram generation
+
+```bash
+uv run diagram_generator.py <input_file.txt> <diagram_type> [output_file.svg]
+```
 
 ## ✅ Requirements
 - Python 3.7+
